@@ -1,29 +1,30 @@
-const blabber = require('./shared/blabber');
+const blabber = require("./shared/blabber");
 
-const { getIdentifier, getTitle, getCSSPlural, getCSSSingular, writeWidget, writeCSSList } = require('./cms/helpers');
+const {
+  getIdentifier,
+  getTitle,
+  getCSSPlural,
+  getCSSSingular,
+  writeWidget,
+  writeCSSList,
+} = require("./cms/helpers");
 
-const template = (identifier, _fields) => (`import React from 'react';
+const template = (identifier, _fields) => `import React from 'react';
 import { Container, List, TextInput, SelectMenu, LinkSettings, Img } from '@raketa-cms/raketa-cms';
 import { ImagePicker } from '@raketa-cms/raketa-image-picker';
-import { RichText } from '@raketa-cms/raketa-rte';
+import { RichText } from '@raketa-cms/raketa-mce';
 import Link from '../frontend/Link';
 
 const Item = ({ title, link, image, description }) => (
   <div className="${getCSSSingular(identifier)}">
-    <Img src={image} variant="image" />
+    <Link settings={link}>
+      <Img src={image} variant="image" className="image" />
 
-    <div className="article-content">
-      <h4 className="article-title">{link ? <Link settings={link}>{title}</Link> : title}</h4>
-      {description && <div dangerouslySetInnerHTML={{ __html: description }} />}
-    </div>
+      <h3 className="title">{title}</h3>
+      {description && <div className="description" dangerouslySetInnerHTML={{ __html: description }} />}
+    </Link>
   </div>
 );
-
-const variants = {
-  2: 6,
-  3: 4,
-  4: 3,
-};
 
 const ${getIdentifier(identifier)} = ({ variant, list, containerSettings }) => (
   <Container settings={containerSettings}>
@@ -31,7 +32,7 @@ const ${getIdentifier(identifier)} = ({ variant, list, containerSettings }) => (
       <div className="container">
         <div className="row">
           {list.map((item) =>
-            <div key={item.id} className={\`col-\${variants[variant]}\`}>
+            <div key={item.id} className={variant}>
               <Item {...item} />
             </div>
           )}
@@ -46,7 +47,7 @@ ${getIdentifier(identifier)}.category = '_Unspecified';
 ${getIdentifier(identifier)}.dialogSize = 'large';
 
 ${getIdentifier(identifier)}.defaults = {
-  variant: 3,
+  variant: 'col-3',
   list: [
     { id: 1, link: LinkSettings.defaults, image: 'http://placehold.it/400x300', title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' },
     { id: 2, link: LinkSettings.defaults, image: 'http://placehold.it/400x300', title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' },
@@ -87,7 +88,7 @@ ${getIdentifier(identifier)}.adminFields = (items, onChange, settings) => (
   <div>
     <SelectMenu
       label="Variant"
-      options={[[2, '2 columns'], [3, '3 columns'], [4, '4 columns']]}
+      options={[['col-6', '2 columns'], ['col-4', '3 columns'], ['col-3', '4 columns']]}
       value={settings.variant}
       onChange={value => onChange('variant', value)}
     />
@@ -104,7 +105,7 @@ ${getIdentifier(identifier)}.adminFields = (items, onChange, settings) => (
 );
 
 export default ${getIdentifier(identifier)};
-`);
+`;
 
 module.exports = (name, fields) => {
   console.log(`${blabber()}\n`);
