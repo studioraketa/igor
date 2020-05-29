@@ -49,9 +49,9 @@ ${getIdentifier(identifier)}.dialogSize = 'large';
 ${getIdentifier(identifier)}.defaults = {
   variant: 'col-3',
   list: [
-    { id: 1, link: LinkSettings.defaults, image: 'http://placehold.it/400x300', title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' },
-    { id: 2, link: LinkSettings.defaults, image: 'http://placehold.it/400x300', title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' },
-    { id: 3, link: LinkSettings.defaults, image: 'http://placehold.it/400x300', title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' },
+    { id: 1, link: LinkSettings.defaults, image: 'https://placehold.it/400x300', title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' },
+    { id: 2, link: LinkSettings.defaults, image: 'https://placehold.it/400x300', title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' },
+    { id: 3, link: LinkSettings.defaults, image: 'https://placehold.it/400x300', title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' },
   ],
   containerSettings: {},
 };
@@ -97,7 +97,7 @@ ${getIdentifier(identifier)}.adminFields = (items, onChange, settings) => (
       listItem={(settings, onChangeItem) =>
         <ListItem settings={settings} onChangeItem={onChangeItem} />}
       items={items}
-      template={{ link: LinkSettings.defaults, image: 'http://placehold.it/400x300', title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' }}
+      template={{ link: LinkSettings.defaults, image: 'https://placehold.it/400x300', title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' }}
       primaryField="title"
       onChangeList={onChange}
     />
