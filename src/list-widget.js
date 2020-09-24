@@ -12,7 +12,7 @@ const {
 const template = (identifier, _fields) => `import React from 'react';
 import { Container, List, TextInput, SelectMenu, LinkSettings, Img } from '@raketa-cms/raketa-cms';
 import { ImagePicker } from '@raketa-cms/raketa-image-picker';
-import { RichText } from '@raketa-cms/raketa-mce';
+import { RichText } from '@raketa-cms/raketa-rte';
 import Link from '../frontend/Link';
 
 const Item = ({ title, link, image, description }) => (

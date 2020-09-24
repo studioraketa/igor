@@ -14,7 +14,7 @@ const {
 const template = (identifier, fields) => `import React from 'react';
 import { Container } from '@raketa-cms/raketa-cms';
 import { ImagePicker } from '@raketa-cms/raketa-image-picker';
-import { RichText } from '@raketa-cms/raketa-mce';
+import { RichText } from '@raketa-cms/raketa-rte';
 
 const ${getIdentifier(identifier)} = ({ ${getFieldsList(fields).join(
   ", "
