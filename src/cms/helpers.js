@@ -50,8 +50,8 @@ const getJSONDefinition = (type = "text") => {
     return { type: "custom", component: "ImagePicker" };
   }
 
-  if (type === "rich") {
-    return { type: "custom", component: "RichText" };
+  if (type === "markdown") {
+    return { type: "custom", component: "MarkdownInput" };
   }
 
   return { type };
@@ -62,7 +62,10 @@ const getDefaults = (fields) =>
 
 const getAdminFields = (fields) =>
   Object.values(getFields(fields)).map(
-    (f) => `  ${f.name}: ${JSON.stringify(f.json)},`
+    (f) =>
+      `  ${f.name}: ${JSON.stringify(f.json)
+        .replace('"ImagePicker"', "ImagePicker")
+        .replace('"MarkdownInput"', "MarkdownInput")},`
   );
 
 const getCSSPlural = (name) =>
@@ -76,28 +79,26 @@ const writeWidget = (name, fields, template) => {
   const result = template(name, fields);
 
   // Write widget file
-  const isNext = fs.existsSync("./pages");
-  const destination = isNext
-    ? "./components/widgets"
-    : "./app/javascript/components/widgets";
+  const destination = "./components/widgets";
   const widgetFile = `${destination}/${identifier}.js`;
   const libraryFile = `${destination}/index.js`;
+  const adminLibraryFile = `${destination}/admin.js`;
 
   fs.mkdirSync(destination, { recursive: true });
   fs.writeFileSync(widgetFile, result, "utf8");
 
   // Update library file
-  const index = fs.readFileSync(libraryFile, { encoding: "utf8" });
+  const library = fs.readFileSync(libraryFile, { encoding: "utf8" });
 
-  if (index.indexOf(`import ${identifier} `) === -1) {
-    const [imports, exports] = index
+  if (library.indexOf(`import { Widget as ${identifier} `) === -1) {
+    const [imports, exports] = library
       .replace("};\n", "")
       .split("export default {\n");
 
     const indexResult = `${imports.slice(
       0,
       -1
-    )}import ${identifier} from './${identifier}';
+    )}import { Widget as ${identifier} } from "./${identifier}";
 
   export default {
   ${exports}  ${identifier},
@@ -106,15 +107,32 @@ const writeWidget = (name, fields, template) => {
     fs.writeFileSync(libraryFile, indexResult, "utf8");
   }
 
+  // Update admin library file
+  const adminLibrary = fs.readFileSync(adminLibraryFile, { encoding: "utf8" });
+
+  if (adminLibrary.indexOf(`import * as ${identifier} `) === -1) {
+    const [imports, exports] = adminLibrary
+      .replace("};\n", "")
+      .split("export default {\n");
+
+    const indexResult = `${imports.slice(
+      0,
+      -1
+    )}import * as ${identifier} from "./${identifier}";
+
+  export default {
+  ${exports}  ${identifier},
+  };
+  `;
+    fs.writeFileSync(adminLibraryFile, indexResult, "utf8");
+  }
+
   return widgetFile;
 };
 
 const writeCSSFile = (fileName, result) => {
   // Write style file
-  const isNext = fs.existsSync("./pages");
-  const destination = isNext
-    ? "./sass/frontend/components"
-    : "./app/assets/stylesheets/frontend/components";
+  const destination = "./sass/frontend/components";
   const widgetFile = `${destination}/_${fileName}.scss`;
   const libraryFile = `${destination}/_module.scss`;
 

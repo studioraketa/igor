@@ -1,7 +1,6 @@
 const blabber = require("./shared/blabber");
 
 const {
-  getIdentifier,
   getTitle,
   getFieldsList,
   getDefaults,
@@ -13,12 +12,10 @@ const {
 
 const template = (identifier, fields) => `import React from 'react';
 import { Container } from '@raketa-cms/raketa-cms';
-import { ImagePicker } from '@raketa-cms/raketa-image-picker';
-import { RichText } from '@raketa-cms/raketa-rte';
+import { ImagePicker, imagePlaceholder } from '@raketa-cms/raketa-image-picker';
+import { MarkdownInput, toHTML } from "@raketa-cms/raketa-markdown-input";
 
-const ${getIdentifier(identifier)} = ({ ${getFieldsList(fields).join(
-  ", "
-)}, containerSettings }) => (
+const Widget = ({ ${getFieldsList(fields).join(", ")}, containerSettings }) => (
   <Container settings={containerSettings}>
     <div className="${getCSSSingular(identifier)}">
       <div className="container">
@@ -28,21 +25,22 @@ const ${getIdentifier(identifier)} = ({ ${getFieldsList(fields).join(
   </Container>
 );
 
-${getIdentifier(identifier)}.title = '${getTitle(identifier)}';
-${getIdentifier(identifier)}.category = '_Unspecified';
-${getIdentifier(identifier)}.primaryField = '${getFieldsList(fields)[0]}';
-${getIdentifier(identifier)}.dialogSize = 'large';
+const Config = {
+  title: '${getTitle(identifier)}',
+  category: '_Unspecified',
+  primaryField: '${getFieldsList(fields)[0]}',
+};
 
-${getIdentifier(identifier)}.defaults = {
+const Defaults = {
 ${getDefaults(fields).join("\n")}
   containerSettings: {},
 };
 
-${getIdentifier(identifier)}.adminFields = {
+const Admin = {
 ${getAdminFields(fields).join("\n")}
 };
 
-export default ${getIdentifier(identifier)};
+export { Widget, Admin, Config, Defaults };
 `;
 
 module.exports = (name, fields) => {

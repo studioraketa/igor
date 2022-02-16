@@ -11,8 +11,8 @@ const {
 
 const template = (identifier, _fields) => `import React from 'react';
 import { Container, List, TextInput, SelectMenu, LinkSettings, Img } from '@raketa-cms/raketa-cms';
-import { ImagePicker } from '@raketa-cms/raketa-image-picker';
-import { RichText } from '@raketa-cms/raketa-rte';
+import { ImagePicker, imagePlaceholder } from '@raketa-cms/raketa-image-picker';
+import { MarkdownInput, toHTML } from "@raketa-cms/raketa-markdown-input";
 import Link from '../frontend/Link';
 
 const Item = ({ title, link, image, description }) => (
@@ -21,12 +21,12 @@ const Item = ({ title, link, image, description }) => (
       <Img src={image} variant="image" className="image" />
 
       <h3 className="title">{title}</h3>
-      {description && <div className="description" dangerouslySetInnerHTML={{ __html: description }} />}
+      {description && <div className="description" dangerouslySetInnerHTML={{ __html: toHTML(description) }} />}
     </Link>
   </div>
 );
 
-const ${getIdentifier(identifier)} = ({ variant, list, containerSettings }) => (
+const Widget = ({ variant, list, containerSettings }) => (
   <Container settings={containerSettings}>
     <div className="${getCSSPlural(identifier)}">
       <div className="container">
@@ -42,16 +42,17 @@ const ${getIdentifier(identifier)} = ({ variant, list, containerSettings }) => (
   </Container>
 );
 
-${getIdentifier(identifier)}.title = '${getTitle(identifier)}';
-${getIdentifier(identifier)}.category = '_Unspecified';
-${getIdentifier(identifier)}.dialogSize = 'large';
+const Config = {
+  title: '${getTitle(identifier)}',
+  category: '_Unspecified'
+}
 
-${getIdentifier(identifier)}.defaults = {
+const Defaults = {
   variant: 'col-3',
   list: [
-    { id: 1, link: LinkSettings.defaults, image: 'https://placehold.it/400x300', title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' },
-    { id: 2, link: LinkSettings.defaults, image: 'https://placehold.it/400x300', title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' },
-    { id: 3, link: LinkSettings.defaults, image: 'https://placehold.it/400x300', title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' },
+    { id: 1, link: LinkSettings.defaults, image: imagePlaceholder('1920x1080'), title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' },
+    { id: 2, link: LinkSettings.defaults, image: imagePlaceholder('1920x1080'), title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' },
+    { id: 3, link: LinkSettings.defaults, image: imagePlaceholder('1920x1080'), title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' },
   ],
   containerSettings: {},
 };
@@ -76,7 +77,7 @@ const ListItem = ({ settings, onChangeItem }) => (
       value={settings.title}
     />
 
-    <RichText
+    <MarkdownInput
       label="Description"
       onChange={value => onChangeItem('description', value)}
       value={settings.description}
@@ -84,7 +85,7 @@ const ListItem = ({ settings, onChangeItem }) => (
   </div>
 );
 
-${getIdentifier(identifier)}.adminFields = (items, onChange, settings) => (
+const Admin = (items, onChange, settings) => (
   <div>
     <SelectMenu
       label="Variant"
@@ -97,14 +98,14 @@ ${getIdentifier(identifier)}.adminFields = (items, onChange, settings) => (
       listItem={(settings, onChangeItem) =>
         <ListItem settings={settings} onChangeItem={onChangeItem} />}
       items={items}
-      template={{ link: LinkSettings.defaults, image: 'https://placehold.it/400x300', title: 'Title', description: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.</p>' }}
+      template={{ link: LinkSettings.defaults, image: imagePlaceholder('1920x1080'), title: 'Title', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores distinctio ea non? Quisquam enim blanditiis deserunt cumque earum.' }}
       primaryField="title"
       onChangeList={onChange}
     />
   </div>
 );
 
-export default ${getIdentifier(identifier)};
+export { Widget, Admin, Config, Defaults };
 `;
 
 module.exports = (name, fields) => {
